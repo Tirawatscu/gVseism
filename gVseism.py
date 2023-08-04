@@ -41,4 +41,4 @@ while True:
     # Send data to server
     sio.emit('client_data', {'value': data})
 
-    time.sleep(1)
+    time.sleep(0.01)
