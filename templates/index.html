@@ -1,0 +1,36 @@
+<!-- Save as templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+</head>
+<body>
+<h1>Waveform Chart</h1>
+<canvas id="chart"></canvas>
+<script>
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    var chart = new Chart(document.getElementById('chart'), {
+        type: 'line',
+        data: {
+            datasets: [{
+                label: 'Waveform',
+                data: [],
+            }],
+        },
+        options: {
+            scales: {
+                x: { type: 'time' },
+            },
+        },
+    });
+
+    socket.on('server_data', function(data) {
+        chart.data.labels.push(new Date());
+        chart.data.datasets[0].data.push(data.value);
+        chart.update();
+    });
+</script>
+</body>
+</html>
