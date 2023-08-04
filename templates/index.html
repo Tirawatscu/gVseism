@@ -34,11 +34,13 @@
                     max: Date.now()
                 },
                 y: {
-                    min: -1,
-                    max: 1,
+                    min: -2,  // Set your desired minimum
+                    max: 2,  // Set your desired maximum
+                },
             },
         },
     });
+    
     
     socket.on('server_data', function(data) {
         if (chart.data.labels.length > 100) {
