@@ -1,10 +1,13 @@
 <!-- Save as templates/index.html -->
 <!DOCTYPE html>
 <html>
-<head>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
-</head>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    </head>
+    
 <body>
 <h1>Waveform Chart</h1>
 <canvas id="chart"></canvas>
@@ -20,17 +23,37 @@
             }],
         },
         options: {
+            animation: false,
             scales: {
-                x: { type: 'time' },
+                x: { 
+                    type: 'time',
+                    time: {
+                        unit: 'second'
+                    },
+                    min: Date.now() - 1000,  // 1 second ago
+                    max: Date.now()
+                },
             },
         },
     });
-
+    
     socket.on('server_data', function(data) {
+        if (chart.data.labels.length > 100) {
+            // If we have more than 100 data points, remove the oldest one
+            chart.data.labels.shift();
+            chart.data.datasets[0].data.shift();
+        }
         chart.data.labels.push(new Date());
         chart.data.datasets[0].data.push(data.value);
+    
+        // Update the scale bounds
+        chart.options.scales.x.min = Date.now() - 1000;  // 1 second ago
+        chart.options.scales.x.max = Date.now();
         chart.update();
     });
+    
+    
 </script>
+
 </body>
 </html>
