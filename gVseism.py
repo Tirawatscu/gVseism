@@ -23,6 +23,7 @@ except ImportError:
     print("ADS1263 library not available, using simulated data")
 
 sio = socketio.Client()
+#Https is not supported
 sio.connect('http://192.168.1.100:8090')
 
 def read_adc():
