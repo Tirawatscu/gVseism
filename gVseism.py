@@ -23,7 +23,7 @@ except ImportError:
     print("ADS1263 library not available, using simulated data")
 
 sio = socketio.Client()
-sio.connect('192.168.1.100:8090')
+sio.connect('https://192.168.1.100:8090')
 
 def read_adc():
     value = ADC.ADS1263_GetChannalValue(CHANNEL)
